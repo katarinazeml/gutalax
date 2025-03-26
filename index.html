@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concert Countdown</title>
     <style>
-
         * {
             margin: 0;
             padding: 0;
@@ -54,7 +53,7 @@
             border-radius: 50% 50% 20% 20%;
             z-index: 2;
             color: #39FF14;
-            text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px black;
+            text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px #39FF14;
         }
 
         h1 {
@@ -62,23 +61,42 @@
           color: #39FF14;
           font-size: 5em;
           text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px black;
+
         }
 
         h2 {
           font-family: Turds, serif;
           color: #39FF14;
           font-size: 2.95em;
-          text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px black;
+          text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px #39FF14;
+          display: none;
         }
 
         h3 {
           font-family: Turds, serif;
           color: #39FF14;
           font-size: 7em;
-          text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px black;
+            text-shadow: 0 0 5px black, 0 0 10px black, 0 0 10px black;
+
         }
 
+        #startButton {
+            font-size: 5.5em;
+            background-color: #39FF14;
+            color: black;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-family: Turds, serif;
+            box-shadow: 0 0 5px black, 0 0 10px #39FF14, 0 0 10px #39FF14;
+            text-shadow: 0 0 5px black;
+        }
 
+        #startButton:hover {
+            background-color: #00FF00;
+        }
     </style>
 </head>
 <body>
@@ -89,14 +107,20 @@
 
     <div id="countdown"></div>
     <br>
-    <h2>UNTIL GUTALAX CONCERT IN TALLINN</h2>
+    <h2 id="concert-info">UNTIL GUTALAX CONCERT IN TALLINN</h2>
 
-
-
-    <!-- Add the fart sound (you can replace the source with a URL to your fart sound file) -->
+    <!-- Add the fart sound -->
     <audio id="fart-sound" src="fart-83471.mp3" preload="auto"></audio>
 
+    <!-- Button to start the countdown -->
+    <button id="startButton">Show Fartdown</button>
+
     <script>
+        // Initialize variables
+        let countdownInterval;
+        let fartSoundInterval;
+
+        // Function to update countdown
         function updateCountdown() {
             const concertDate = new Date("2025-10-24T19:00:00").getTime();
             const now = new Date().getTime();
@@ -112,20 +136,40 @@
                     `${days}d ${hours}h ${minutes}m ${seconds}s`;
             } else {
                 document.getElementById("countdown").innerHTML = "The concert has started!";
+                clearInterval(countdownInterval);
+                clearInterval(fartSoundInterval);
             }
         }
 
+        // Function to play fart sound
         function playFartSound() {
             const fartSound = document.getElementById("fart-sound");
-            fartSound.play(); // Plays the fart sound every second
+            fartSound.play();
         }
 
-        setInterval(() => {
-            updateCountdown();
-            playFartSound(); // Plays fart sound every second
-        }, 1000);
+        // Function to start the countdown and fart sound when button is clicked
+        function startCountdown() {
+            // Start the countdown every second
+            countdownInterval = setInterval(() => {
+                updateCountdown();
+            }, 1000);
 
-        updateCountdown();
+            // Play fart sound every second
+            fartSoundInterval = setInterval(() => {
+                playFartSound();
+            }, 1000);
+
+            // Hide the "Show Fartdown" button after it's clicked
+            document.getElementById("startButton").style.display = "none";
+
+            // Delay the showing of h2 element until the countdown updates for the first time
+            setTimeout(() => {
+                document.getElementById("concert-info").style.display = "block";
+            }, 1000); // Wait for 1 second after the countdown starts
+        }
+
+        // Add event listener to the button
+        document.getElementById("startButton").addEventListener("click", startCountdown);
     </script>
 </body>
 </html>
